@@ -17,7 +17,7 @@ admin.initializeApp({
     credential: admin.credential.cert(
         serviceAccount
     ),
-    databaseURL: process.env.DATABASE_URL
+    databaseURL: 'https://eclyra-50711-default-rtdb.asia-southeast1.firebasedatabase.app/'
 })
 
 
@@ -42,5 +42,6 @@ app.use(ErrorHandler)
 
 
 app.listen(PORT, () => {
+    console.log(serviceAccount)
     console.log(`App is listening at PORT - ${PORT}`)
 })

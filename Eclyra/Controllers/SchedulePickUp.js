@@ -83,7 +83,6 @@ export const AcceptAPickUp = catchAsyncErrors( async(req,res,next) => {
 
 export const getAllPickUpsWithInState = catchAsyncErrors( async(req,res,next) => {
     const {state} = req.params
-    console.log(state)
 
     if(!state) {
         return next(new CustomError('server error, cannot load the live pickups. Reload the page or try again later', 400))
@@ -138,3 +137,24 @@ export const getAllAcceptedPickUps = catchAsyncErrors(async (req, res, next) => 
     });
 
 });
+
+
+export const getAllPickUpsWithInDistricts = catchAsyncErrors( async(req,res,next) => {
+    const {district} = req.params
+
+    if(!district) {
+        return next(new CustomError('server error, cannot load the live pickups. Reload the page or try again later', 400))
+    }
+
+    const pickUps = await db.collection("PickUps").where('pickUpDistrict', '==', district).get()
+
+    const documentsArray = pickUps.docs.map(doc => ({
+        id: doc.id, 
+        ...doc.data()
+    }));
+
+    res.status(200).json({
+        success: true,
+        data: documentsArray
+    })
+})
