@@ -158,3 +158,27 @@ export const getAllPickUpsWithInDistricts = catchAsyncErrors( async(req,res,next
         data: documentsArray
     })
 })
+
+
+export const getAllSellerPickUps = catchAsyncErrors( async(req,res,next) => {
+    const { SellerMail } = req.params;
+
+    if(!SellerMail){
+        return next(new CustomError('Cannot proceed your request right now, please try again later',500));
+    }
+
+    const pickUps = await db.collection("PickUps").where('sellerEmail', '==', SellerMail).get()
+
+    const documents = []
+    pickUps.forEach((doc) => {
+        console.log(doc.data())
+            documents.push({ id: doc.id, ...doc.data() });
+        });  
+
+    console.log(documents)
+
+    res.status(200).json({
+        success: true,
+        data: documents
+    })
+})
